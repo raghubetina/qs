@@ -1,4 +1,13 @@
 Qs::Application.routes.draw do
+  
+  root :to => 'lessons#index'
+  
+  resources :votes
+
+  resources :questions
+
+  resources :lessons
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 

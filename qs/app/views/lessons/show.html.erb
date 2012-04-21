@@ -1,0 +1,17 @@
+<h1>/Lesson</h1>
+
+<p>
+  <b>Name</b><br>
+  <%= @lesson.name %>
+</p>
+
+<p>
+  <b>Embed code</b><br>
+  <%= @lesson.embed_code %>
+</p>
+
+<div class="form-actions">
+  <%= link_to 'Back', lessons_path, :class => 'btn'  %>
+  <%= link_to 'Edit', edit_lesson_path(@lesson), :class => 'btn' %>
+  <%= link_to 'Delete', lesson_path(@lesson), :method => 'delete', :confirm => 'Are you sure?', :class => 'btn btn-danger' %>
+</div>
