@@ -11,13 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120421195946) do
+ActiveRecord::Schema.define(:version => 20120421203611) do
 
   create_table "lessons", :force => true do |t|
     t.string   "name"
     t.string   "embed_code"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+    t.text     "notes"
   end
 
   create_table "questions", :force => true do |t|
