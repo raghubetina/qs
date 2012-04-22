@@ -1,7 +1,7 @@
 <div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
 <div id="question-list" class="span4">
     <div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", class: "span3", placeholder: "Ask a question" %></div>
-    <% @lesson.questions.each do |question| %>
+    <% @lesson.questions.order("created_at DESC").each do |question| %>
       <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary btn-large span3 <%= question.is_answered ? "answered" : nil %>"><%= question.content %></div>
     <% end %>
 </div>
