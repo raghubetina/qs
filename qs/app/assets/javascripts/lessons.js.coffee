@@ -18,17 +18,15 @@ class Socket
 
 EventHandler =
   question: (x) ->
-    console.log 'question', x
     Question.create(x.text, x.id)
   vote: (id) ->
-    console.log 'vote', id
     Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   visit: (i) ->
-    console.log 'visit', i
     numberOfPeople += i
     for id, question of Question.questions
       question.colorize()
+    $("#num_visits").text(numberOfPeople)
   note: (text) -> $("#teacher_note").html(text)
 
 class Question
@@ -94,21 +92,22 @@ load_realtime = ->
   Question.find_in_dom()
   add_vote_click_handler()
 
+playback_has_started = false
 load_playback = ->
+  return if playback_has_started
+  playback_has_started = true
   eventStream = JSON.parse($("#question_data").html())
-  console.log eventStream
   for [time, action, first, second] in eventStream
-    console.log [time, action, first, second]
     arg = if action is 'question' then {id: first, text: second} else first
-    console.log action, arg
     callback = ((action, arg) ->
       -> EventHandler[action](arg)
     )(action, arg)
-    setTimeout(callback, (time - 230)*1000)
+    setTimeout(callback, time*1000)
 
 $ ->
   if $("#lesson_id").length > 0
     load_realtime()
   else
     $("#play_icon").click ->
+      $(this).attr("src", "/assets/play_icon_active.png")
       load_playback()
