@@ -38,7 +38,7 @@ class LessonsController < ApplicationController
     
     if @channel_status == "offline"
       @channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
-      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"]) + 7*3600, end: start + video["lengthInSecond"].to_f } }
+      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"] + " PDT").utc, end: start + video["lengthInSecond"].to_f } }
       
       
     
