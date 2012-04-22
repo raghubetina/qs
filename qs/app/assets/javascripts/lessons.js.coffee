@@ -110,4 +110,5 @@ $ ->
   if $("#lesson_id").length > 0
     load_realtime()
   else
-    load_playback()
+    $("#play_icon").click ->
+      load_playback()
