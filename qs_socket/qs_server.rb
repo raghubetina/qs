@@ -4,7 +4,7 @@ require 'sequel'
 require 'cgi'
 
 DB = Sequel.sqlite("../qs/db/development.sqlite3")
-$lessons, $questions, $votes = %w[lessons questions votes].map { |s| DB[s.to_sym] }
+$visits, $lessons, $questions, $votes = %w[visits lessons questions votes].map { |s| DB[s.to_sym] }
 
 class Connection
   @@lessons = {}
@@ -27,7 +27,7 @@ class Connection
 
   def close
     @lesson[:number_of_connections] -= 1
-    send_to_all(people: -1)
+    visit -1
     @channel.unsubscribe @sid
   end
 
@@ -76,10 +76,18 @@ class Connection
     end
     @lesson = @@lessons[lesson_id]
     @channel = @lesson[:channel]
-    send_to_me(people: @lesson[:number_of_connections])
+    send_to_me(visit: @lesson[:number_of_connections])
     @lesson[:number_of_connections] += 1
     @sid = @channel.subscribe { |data| @ws.send(data) }
-    send_to_all(people: 1)
+    visit(1)
+  end
+
+  def visit i
+    $visits.insert(created_at: Time.now.utc,
+            updated_at: Time.now.utc,
+            delta: i,
+            lesson_id: @lesson[:id])
+    send_to_all(visit: i)
   end
 
   def send_to_me hash
