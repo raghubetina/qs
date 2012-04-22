@@ -38,7 +38,7 @@ class Question
   create_dom: ->
     @dom = $("<div>").
       text(@text).
-      addClass("btn btn-primary btn-large span3 question_div").
+      addClass("btn btn-primary span3 question_div").
       insertAfter("#new_question_div")
   answer: -> socket.send(answer: @id)
   mark_answer: -> @dom.addClass('answered')
