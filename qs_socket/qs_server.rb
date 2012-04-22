@@ -21,7 +21,7 @@ class Connection
     message = JSON.parse msg
     p message
     message.each do |key, value|
-      send(key.to_sym, value) if %w(question note vote lesson_id).include? key
+      send(key.to_sym, value) if %w(question answer note vote lesson_id).include? key
     end
   end
 
@@ -57,6 +57,12 @@ class Connection
            question_id: id
            )
     send_to_all(vote: id)
+  end
+
+  def answer id
+    return unless @teacher
+    $questions.filter(id: id).update(is_answered: true)
+    send_to_all(answer: id)
   end
 
   def lesson_id lesson_id
