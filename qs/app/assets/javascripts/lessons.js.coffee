@@ -2,6 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+
+return unless $("#lesson_id").length > 0
 numberOfPeople = 0
 
 class Socket
@@ -15,7 +17,7 @@ class Socket
     for key, value of JSON.parse(e.data)
       this[key](value)
   question: (x) ->
-    new Question(x.text, x.id)
+    Question.create(x.text, x.id)
   vote: (id) -> Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   people: (i) ->
@@ -29,10 +31,12 @@ class Question
   @create: (text, id) ->
     q = new Question(text, id)
     q.create_dom()
+    q.dom.data('id', id)
+    q.dom.data('votes', 0)
   create_dom: ->
     @dom = $("<div>").
       text(@text).
-      addClass("btn btn-primary btn-large span3 question").
+      addClass("btn btn-primary btn-large span3 question_div")
       insertAfter("#new_question_div")
   answer: -> socket.send(answer: @id)
   mark_answer: -> @dom.addClass('answered')
