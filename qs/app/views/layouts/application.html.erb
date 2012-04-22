@@ -22,36 +22,22 @@
   </head>
   <body>
 
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-          <div class="container">
-          <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="#">Qs</a>
-          <div class="container nav-collapse">
-            <ul class="nav">
-                <li><%= link_to "Link1", "/path1"  %></li>
-                <li><%= link_to "Link2", "/path2"  %></li>
-                <li><%= link_to "Link3", "/path3"  %></li>
-            </ul>
-          </div><!--/.nav-collapse -->
-        </div>
-      </div>
-    </div>
 
     <div class="container">
       <div class="content">
+				<div class="row">
+					<h1 class="span4"><a href="/">Question Stream</a></h1>
+				</div>
+				<div class="row">
+					&nbsp;
+				</div>
         <div class="row">
+					<% if flash[:notice] %>
+						<div class="alert alert-info"><%= flash[:notice] %></div>
+					<% end %>
           <%= yield %>
         </div><!--/row-->
       </div><!--/content-->
-
-      <footer>
-        <p>&copy; Question Stream 2012</p>
-      </footer>
 
     </div> <!-- /container -->
 

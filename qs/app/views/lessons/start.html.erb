@@ -1,0 +1,6 @@
+<div class="span6 offset2">
+	<%= form_tag '/lessons/new', method: 'get' do %>
+		<%= text_field_tag :ustream_user_id, value = nil, class: "input-xlarge" %>
+		<%= submit_tag 'Find Channels', class: "btn btn-large btn-primary" %>
+	<% end %>
+</div>

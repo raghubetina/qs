@@ -1,15 +1,13 @@
-<div class="span4">
-	<ul class="unstyled">
-		<li><%= text_area_tag :content %></li>
+<div id="question-list" class="span4">
+		<div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", class: "span3", placeholder: "Ask a question" %></div>
 		<% @lesson.questions.each do |question| %>
-			<li style="background-color: #FF0000"><%= question.content %></li>
+			<div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary btn-large span3 <%= question.is_answered ? "answered" : nil %>"><%= question.content %></div>
 		<% end %>
-	</ul>
 </div>
 
 <div class="span8">
 	<div class="row">
-		<iframe src="http://www.ustream.tv/embed/10938654" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live stream by Ustream</a>
+		<iframe src="http://www.ustream.tv/embed/<%= @lesson.embed_code %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br />
 	</div>
  
 	<div class="row">

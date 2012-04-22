@@ -5,16 +5,22 @@
     <div class="control-group">
       <%= f.label :name, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :name, :class => 'text_field' %>
+        www.quickstream.in/<%= f.text_field :name, :class => 'text_field' %>
       </div>
     </div>
 
     <div class="control-group">
       <%= f.label :embed_code, :class => 'control-label' %>
       <div class="controls">
-        <%= f.text_field :embed_code, :class => 'text_field' %>
+        <select name="lesson[embed_code]">
+					<% @results.each do |result| %>
+				  	<option value="<%= result["id"] %>" selected="selected"><%= result["title"] %></option>
+					<% end %>
+				</select>
       </div>
     </div>
+
+
 
     <div class="form-actions">
       <%= f.submit nil, :class => 'btn btn-primary' %>

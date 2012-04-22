@@ -1,6 +1,8 @@
 Qs::Application.routes.draw do
   
-  root :to => 'lessons#index'
+  root :to => 'lessons#start'
+  
+  get 'lessons/start'
   
   resources :votes
 

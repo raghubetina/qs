@@ -1,0 +1,11 @@
+#new_question_div {
+	margin-bottom: 5px;
+}
+
+.question_div {
+	margin: 0 0 5px 0;
+	text-align: left;
+}
+
+#question_input {
+}
