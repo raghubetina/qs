@@ -24,6 +24,7 @@ class Socket
     numberOfPeople += i
     for id, question of Question.questions
       question.colorize()
+  note: (text) -> $("#teacher_note").html(text)
 
 class Question
   @questions: {}
@@ -37,7 +38,7 @@ class Question
     q.colorize()
   create_dom: ->
     @dom = $("<div>").
-      text(@text).
+      html(@text).
       addClass("btn btn-primary span3 question_div").
       insertAfter("#new_question_div")
   answer: -> socket.send(answer: @id)
@@ -79,7 +80,7 @@ add_vote_click_handler = ->
   )
 
 $ ->
-  socket = new Socket("ws://questionstream.in:3116")
+  window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13
     socket.send(question: $(this).val())

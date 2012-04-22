@@ -1,43 +1,51 @@
 require 'em-websocket'
 require 'json'
 require 'sequel'
+require 'cgi'
 
 DB = Sequel.sqlite("../qs/db/development.sqlite3")
 $lessons, $questions, $votes = %w[lessons questions votes].map { |s| DB[s.to_sym] }
 
 class Connection
-  attr_accessor :teacher
   @@lessons = {}
   @@id = 0
   def initialize ws
     @id = (@@id += 1)
     @ws = ws
     @teacher = false
-    ws.onmessage do |msg|
-      message = JSON.parse msg
-      new_message message
-    end
-    ws.onclose do
-      @lesson[:number_of_connections] -= 1
-      send_to_all(people: -1)
-      @channel.unsubscribe @sid
+    ws.onmessage { |msg| new_message msg }
+    ws.onclose { close }
+  end
+
+  def new_message msg
+    message = JSON.parse msg
+    p message
+    message.each do |key, value|
+      send(key.to_sym, value) if %w(question note vote lesson_id).include? key
     end
   end
 
-  def new_message message
-    p message
-    message.each do |key, value|
-      send(key.to_sym, value) if respond_to?(key.to_sym)
-    end
+  def close
+    @lesson[:number_of_connections] -= 1
+    send_to_all(people: -1)
+    @channel.unsubscribe @sid
   end
 
   def question text
+    text = CGI.escapeHTML text
     id = $questions.insert(
                     content: text,
                     created_at: Time.now,
                     updated_at: Time.now,
                     lesson_id: @lesson[:id])
     send_to_all(question: {text: text, id: id})
+  end
+
+  def note text
+    return unless @teacher
+    text = CGI.escapeHTML text
+    $lessons.filter(id: @lesson[:id]).update(notes: text)
+    send_to_all(note: text)
   end
 
   def vote id
