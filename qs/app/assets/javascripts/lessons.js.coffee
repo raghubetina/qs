@@ -51,8 +51,8 @@ class Question
   colorize: ->
     votes = @getVotes()
     denominator = Math.max(1, numberOfPeople)
-    luminance = Math.floor(10 + Math.min(40 * 1.3 * votes / denominator, 40))
-    @dom.css('background-color', "hsl(22, 100%, #{luminance}%)")
+    luminance = Math.floor(100 - Math.min(50 * 2 * votes / denominator, 50))
+    @dom.css('background-color', "hsl(355, 100%, #{luminance}%)")
   @find: (id) ->
     Question.questions[id]
   @find_in_dom: ->
