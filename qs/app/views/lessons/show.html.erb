@@ -1,8 +1,18 @@
-<% if @video_id %>
+
 	 We found an old video -- we need to load question data here
-<% else %>
+
 	<div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
-<% end %>
+
+
+Channel Status: <%= @channel_status %><br/><br/>
+
+Video Times: <%= @video_times %><br/><br/>
+
+Question Times: <%= @lesson.questions.map(&:created_at) %><br/><br/>
+
+Video ID: <%= @video_id %><br/><br/>
+
+
 
 
 <div class="span12" style="text-align: center">

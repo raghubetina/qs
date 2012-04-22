@@ -38,14 +38,14 @@ class LessonsController < ApplicationController
     
     if @channel_status == "offline"
       @channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
-      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"]).utc, end: start + video["lengthInSecond"].to_f } }
+      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"]) + 7*3600, end: start + video["lengthInSecond"].to_f } }
       
       
     
       @lesson.questions.each do |question|
         @video_times.each do |video_time|
-          time_range = video_time[:start]..video_time[:end]
-          if time_range.cover?(question.created_at)
+          time_range = video_time[:start]...video_time[:end]
+          if time_range.cover?(question.created_at.utc)
             @video_id = video_time[:id]
           end
         end
