@@ -17,8 +17,12 @@ class Socket
       EventHandler[key](value)
 
 EventHandler =
-  question: (x) -> Question.create(x.text, x.id)
-  vote: (id) -> Question.find(id).mark_vote()
+  question: (x) ->
+    console.log 'question', x
+    Question.create(x.text, x.id)
+  vote: (id) ->
+    console.log 'vote', id
+    Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   people: (i) ->
     numberOfPeople += i
@@ -91,14 +95,17 @@ load_realtime = ->
 
 load_playback = ->
   eventStream = JSON.parse($("#question_data").html())
-  for [time, action, id, message] in eventStream
+  console.log eventStream
+  for [time, action, id, text] in eventStream
+    console.log [time, action, id, text]
     args = if action is 'question' then {id: id, text: text} else id
-    setTimeout((-> EventHandler[action](args)), time)
+    callback = ((action, args) ->
+      -> EventHandler[action](args)
+    )(action, args)
+    setTimeout(callback, time*1000)
 
 $ ->
   if $("#lesson_id").length > 0
-    alert('live')
     load_realtime()
   else
-    alert('playback')
     load_playback()

@@ -1,9 +1,10 @@
 <% if @video_id %>
-	 We found an old video -- we need to load question data here
+  <div id="question_data" style="display: none;"><%= @events.to_json %></div>
 <% else %>
-	<div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
+  <div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
 <% end %>
 
+<% if nil %>
 Channel Status: <%= @channel_status %><br/><br/>
 
 Video Times: <%= @video_times %><br/><br/>
@@ -11,7 +12,7 @@ Video Times: <%= @video_times %><br/><br/>
 Question Times: <%= @lesson.questions.map(&:created_at) %><br/><br/>
 
 Video ID: <%= @video_id %><br/><br/>
-
+<% end %>
 
 
 
@@ -21,18 +22,20 @@ Video ID: <%= @video_id %><br/><br/>
 
 <div id="question-list" class="span4">
     <div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 255px;" %></div>
+    <% unless @video_id %>
     <% @lesson.questions.order("created_at DESC").each do |question| %>
       <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary"><%= question.content %></div>
+    <% end %>
     <% end %>
 </div>
 
 <div class="span8">
   <div class="row">
-		<% if @video_id %>
-			<iframe src="http://www.ustream.tv/embed/recorded/<%= @video_id %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
-		<% else %>
-    	<iframe src="http://www.ustream.tv/embed/<%= @lesson.embed_code %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br />
-		<% end %>
+    <% if @video_id %>
+      <iframe src="http://www.ustream.tv/embed/recorded/<%= @video_id %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
+    <% else %>
+      <iframe src="http://www.ustream.tv/embed/<%= @lesson.embed_code %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br />
+    <% end %>
   </div>
 
   <div class="row">

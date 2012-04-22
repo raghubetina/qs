@@ -3,15 +3,15 @@ require 'open-uri'
 class LessonsController < ApplicationController
   # GET /lessons
   # GET /lessons.json
-  
+
   def start
   end
-  
+
   def find_name
     @lessons = Lesson.order(:name).where("name like ?", "%#{params[:term]}%")
     render json: @lessons.map(&:name)
   end
-  
+
   def index
     @lessons = Lesson.all
 
@@ -33,15 +33,15 @@ class LessonsController < ApplicationController
     else
       @lesson = Lesson.find(params[:id])
     end
-    
+
     @channel_status = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/getInfo?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]["status"]
-    
+
     if @channel_status == "offline"
       @channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
       @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"] + " PDT").utc, end: start + video["lengthInSecond"].to_f } }
-      
-      
-    
+
+
+
       @lesson.questions.each do |question|
         @video_times.each do |video_time|
           time_range = video_time[:start]...video_time[:end]
@@ -50,11 +50,22 @@ class LessonsController < ApplicationController
           end
         end
       end
-      
-      
+
+
     end
-    
-    
+
+  if @video_id
+    start_time = @video_times.select { |v| v[:id] == @video_id }[0][:start]
+    @events = (@lesson.votes + @lesson.questions).map do |x|
+      time = x.created_at.to_i - start_time.to_i
+      [time , x.class.to_s.downcase] + if x.instance_of? Question
+                                                [x.id, x.content]
+                                              else
+                                                [x.question_id]
+                                              end
+    end
+  end
+
   end
 
   # GET /lessons/new
@@ -83,7 +94,7 @@ class LessonsController < ApplicationController
   def create
     @lesson = Lesson.new(params[:lesson])
     @lesson.name = CGI::escape(@lesson.name)
-    
+
     respond_to do |format|
       if @lesson.save
         format.html { redirect_to "/#{@lesson.name}" }
