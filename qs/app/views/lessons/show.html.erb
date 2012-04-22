@@ -20,10 +20,10 @@ Video ID: <%= @video_id %><br/><br/>
 
 <div id="question-list" class="span4">
     <div id="new_question_div">
-			<% if @video_id %>
+			<% unless @video_id %>
 				<%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 255px;" %>
 			<% else %>
-				<%= image_tag("play_icon.png") %>
+				<%= image_tag("play_icon.png") %><br/>
 				Start Question Stream
 			<% end %>
 		</div>
