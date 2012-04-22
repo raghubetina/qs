@@ -2,7 +2,7 @@ jQuery ->
   $('#lesson_name').autocomplete
     source: $('#lesson_name').data('autocomplete-source')
 
-return unless $("#lesson_id").length == 0 and $("#question_data").length == 0
+return if $("#lesson_id").length == 0 and $("#question_data").length == 0
 numberOfPeople = 0
 
 class Socket
@@ -93,7 +93,7 @@ load_playback = ->
   eventStream = JSON.parse($("#question_data").html())
   for [time, action, id, message] in eventStream
     args = if action is 'question' then {id: id, text: text} else id
-    setTimeout(-> EventHandler[action](args), time)
+    setTimeout((-> EventHandler[action](args)), time)
 
 $ ->
   if $("#lesson_id").length > 0
