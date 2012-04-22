@@ -23,8 +23,7 @@ Video ID: <%= @video_id %><br/><br/>
 			<% unless @video_id %>
 				<%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 255px;" %>
 			<% else %>
-				<%= image_tag("play_icon.png") %><br/>
-				Start Question Stream
+				<%= image_tag("play_icon.png") %>
 			<% end %>
 		</div>
     <% unless @video_id %>
