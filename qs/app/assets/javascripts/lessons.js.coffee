@@ -53,6 +53,8 @@ class Question
     denominator = Math.max(1, numberOfPeople)
     luminance = Math.floor(100 - Math.min(50 * 2 * votes / denominator, 50))
     @dom.css('background-color', "hsl(355, 100%, #{luminance}%)")
+    luminance = Math.floor(Math.min(100 * 1.5 * votes / denominator, 100))
+    @dom.css('color', "hsl(48, 0%, #{luminance}%)")
   @find: (id) ->
     Question.questions[id]
   @find_in_dom: ->
