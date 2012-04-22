@@ -65,6 +65,7 @@ class LessonsController < ApplicationController
   # POST /lessons.json
   def create
     @lesson = Lesson.new(params[:lesson])
+    @lesson.name = CGI::escape(@lesson.name)
     
     respond_to do |format|
       if @lesson.save
