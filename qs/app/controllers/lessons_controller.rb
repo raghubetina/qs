@@ -34,28 +34,25 @@ class LessonsController < ApplicationController
       @lesson = Lesson.find(params[:id])
     end
 
-    @channel_status = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/getInfo?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]["status"]
+    channel_status = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/getInfo?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]["status"]
 
-    if @channel_status == "offline"
-      @channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
-      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"] + " PDT").utc, end: start + video["lengthInSecond"].to_f } }
-
-
-
-      @lesson.questions.each do |question|
-        @video_times.each do |video_time|
-          time_range = video_time[:start]...video_time[:end]
-          if time_range.cover?(question.created_at.utc)
-            @video_id = video_time[:id]
+    if channel_status == "offline"
+      channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
+      if channel_videos
+        video_times = channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"] + " PDT").utc, end: start + video["lengthInSecond"].to_f } }
+        @lesson.questions.each do |question|
+          video_times.each do |video_time|
+            time_range = video_time[:start]...video_time[:end]
+            if time_range.cover?(question.created_at.utc)
+              @video_id = video_time[:id]
+            end
           end
         end
       end
-
-
     end
 
   if @video_id
-    start_time = @video_times.select { |v| v[:id] == @video_id }[0][:start]
+    start_time = video_times.select { |v| v[:id] == @video_id }[0][:start]
     @events = (@lesson.votes + @lesson.questions).map do |x|
       time = x.created_at.to_i - start_time.to_i
       [time , x.class.to_s.downcase] + if x.instance_of? Question
