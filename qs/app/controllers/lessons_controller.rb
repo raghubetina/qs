@@ -53,13 +53,15 @@ class LessonsController < ApplicationController
 
   if @video_id
     start_time = video_times.select { |v| v[:id] == @video_id }[0][:start]
-    @events = (@lesson.votes + @lesson.questions).map do |x|
+    @events = (@lesson.votes + @lesson.questions + @lesson.visits).map do |x|
       time = x.created_at.to_i - start_time.to_i
       [time , x.class.to_s.downcase] + if x.instance_of? Question
-                                                [x.id, x.content]
-                                              else
-                                                [x.question_id]
-                                              end
+                                         [x.id, x.content]
+                                       elsif x.instance_of? Vote
+                                         [x.question_id]
+                                       else
+                                         [x.delta]
+                                       end
     end
   end
 

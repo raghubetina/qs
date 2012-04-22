@@ -25,6 +25,7 @@ EventHandler =
     Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   visit: (i) ->
+    console.log 'visit', i
     numberOfPeople += i
     for id, question of Question.questions
       question.colorize()
@@ -96,13 +97,14 @@ load_realtime = ->
 load_playback = ->
   eventStream = JSON.parse($("#question_data").html())
   console.log eventStream
-  for [time, action, id, text] in eventStream
+  for [time, action, first, second] in eventStream
     console.log [time, action, first, second]
-    arg = if 'question' then {id: first, text: second} else first
+    arg = if action is 'question' then {id: first, text: second} else first
+    console.log action, arg
     callback = ((action, arg) ->
-      -> EventHandler[action](args)
+      -> EventHandler[action](arg)
     )(action, arg)
-    setTimeout(callback, time*1000)
+    setTimeout(callback, (time - 230)*1000)
 
 $ ->
   if $("#lesson_id").length > 0
