@@ -2,7 +2,7 @@ jQuery ->
   $('#lesson_name').autocomplete
     source: $('#lesson_name').data('autocomplete-source')
 
-return unless $("#lesson_id").length > 0
+return unless $("#lesson_id").length == 0 and $("#question_data").length == 0
 numberOfPeople = 0
 
 class Socket
@@ -14,9 +14,10 @@ class Socket
     @ws.send(JSON.stringify(hash))
   onmessage: (e) ->
     for key, value of JSON.parse(e.data)
-      this[key](value)
-  question: (x) ->
-    Question.create(x.text, x.id)
+      EventHandler[key](value)
+
+EventHandler =
+  question: (x) -> Question.create(x.text, x.id)
   vote: (id) -> Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   people: (i) ->
@@ -77,7 +78,7 @@ add_vote_click_handler = ->
     question.vote()
   )
 
-$ ->
+load_realtime = ->
   window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13
@@ -87,3 +88,17 @@ $ ->
   )
   Question.find_in_dom()
   add_vote_click_handler()
+
+load_playback = ->
+  eventStream = JSON.parse($("#question_data").html())
+  for [time, action, id, message] in eventStream
+    args = if action is 'question' then {id: id, text: text} else id
+    setTimeout(-> EventHandler[action](args), time)
+
+$ ->
+  if $("#lesson_id").length > 0
+    alert('live')
+    load_realtime()
+  else
+    alert('playback')
+    load_playback()
