@@ -49,7 +49,7 @@ class Connection
   end
 
   def vote id
-    return unless $votes.filter().count.zero?
+    return unless $votes.filter(user_id: @id, question_id: id).count.zero?
     $votes.insert(
            created_at: Time.now,
            updated_at: Time.now,
