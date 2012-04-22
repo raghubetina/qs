@@ -4,19 +4,10 @@
   <div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
 <% end %>
 
-<% if nil %>
-Channel Status: <%= @channel_status %><br/><br/>
-
-Video Times: <%= @video_times %><br/><br/>
-
-Question Times: <%= @lesson.questions.map(&:created_at) %><br/><br/>
-
-Video ID: <%= @video_id %><br/><br/>
-<% end %>
-
 <div class="span12" style="text-align: center">
   <p style="font-style: italic; font-size: 200%; margin-bottom: 30px"><%= @lesson.name %></p>
-</div><br/><br/>
+	<p style="text-transform: uppercase; color: #ccc"><span id="num_visits">0</span> people in attendance</p>
+</div><br/>
 
 <div id="question-list" class="span4">
     <div id="new_question_div">
