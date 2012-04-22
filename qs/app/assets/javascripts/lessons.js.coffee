@@ -5,7 +5,6 @@ jQuery ->
 return unless $("#lesson_id").length > 0
 numberOfPeople = 0
 
-
 class Socket
   constructor: (url) ->
     @ws = new WebSocket(url)
@@ -33,48 +32,45 @@ class Question
   @create: (text, id) ->
     q = new Question(text, id)
     q.create_dom()
-    q.dom.data('id', id)
-    q.dom.data('votes', 0)
-    q.colorize()
   create_dom: ->
     @dom = $("<div>").
       html(@text).
       addClass("btn btn-primary span3 question_div").
       insertAfter("#new_question_div")
+    @setVotes(0)
+    @dom.attr('data-id', @id)
+    @colorize()
+  getVotes: -> parseInt(@dom.attr('data-votes'))
+  setVotes: (i) -> @dom.attr('data-votes', i)
   answer: -> socket.send(answer: @id)
   mark_answer: -> @dom.addClass('answered')
   vote: -> socket.send(vote: @id)
   mark_vote: ->
-    votes = parseInt(@dom.data('votes')) + 1
-    @dom.data('votes', votes)
+    @setVotes(@getVotes() + 1)
     @colorize()
   colorize: ->
-    votes = parseInt(@dom.data('votes'))
+    votes = @getVotes()
     denominator = Math.max(1, numberOfPeople)
-    score = Math.min(255 * 1.3 * votes / denominator, 255)
-    score = Math.floor score
-    console.log votes, denominator, score
-    color = "rgba(#{score}, 0, 0, 1)"
-    console.log color
-    @dom.css('background-color', color)
+    luminance = Math.floor(10 + Math.min(40 * 1.3 * votes / denominator, 40))
+    @dom.css('background-color', "hsl(22, 100%, #{luminance}%)")
   @find: (id) ->
     Question.questions[id]
   @find_in_dom: ->
     for dom in $(".question_div")
       dom = $(dom)
       text = dom.text()
-      id = dom.data('id')
+      id = parseInt(dom.attr('data-id'))
       question = new Question(text, id)
       question.dom = dom
       question.colorize()
 
 window.question = Question
 
-socket = undefined
+isTeacher = socket = undefined
 
 add_vote_click_handler = ->
   $("#question-list").on('click', '.question_div', ->
-    id = parseInt($(this).data('id'))
+    id = parseInt($(this).attr('data-id'))
     question = Question.find(id)
     question.vote()
   )
@@ -87,5 +83,5 @@ $ ->
     $(this).val("")
     false
   )
-  setTimeout((-> Question.find_in_dom()), 300)
+  Question.find_in_dom()
   add_vote_click_handler()
