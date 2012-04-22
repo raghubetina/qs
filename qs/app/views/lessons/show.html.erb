@@ -1,18 +1,19 @@
+<div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
 <div class="span4">
-	<ul class="unstyled">
-		<li><%= text_area_tag :content %></li>
-		<% @lesson.questions.each do |question| %>
-			<li style="background-color: #FF0000"><%= question.content %></li>
-		<% end %>
-	</ul>
+  <ul class="unstyled" id="question_ul">
+    <li id="new_question_li"><%= text_area_tag :content %></li>
+    <% @lesson.questions.order("created_at DESC").each do |question| %>
+      <li style="background-color: #FF0000"><%= question.content %></li>
+    <% end %>
+  </ul>
 </div>
 
 <div class="span8">
-	<div class="row">
-		<iframe src="http://www.ustream.tv/embed/10938654" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live stream by Ustream</a>
-	</div>
- 
-	<div class="row">
-		<%= @lesson.notes %>
-	</div>
+  <div class="row">
+<!-- <iframe src="http://www.ustream.tv/embed/10938654" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br /><a href="http://www.ustream.tv/" style="padding: 2px 0px 4px; width: 400px; background: #ffffff; display: block; color: #000000; font-weight: normal; font-size: 10px; text-decoration: underline; text-align: center;" target="_blank">Live stream by Ustream</a> -->
+  </div>
+
+  <div class="row">
+    <%= @lesson.notes %>
+  </div>
 </div>
