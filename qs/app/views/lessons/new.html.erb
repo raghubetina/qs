@@ -3,9 +3,9 @@
 </div><br/><br/>
 
 <%= form_for @lesson, :html => { :class => 'form-horizontal' } do |f| %>
-	<div class="span10" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 118px">
+	<div class="span10" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 123px">
 		Ustream Channel
-		<select name="lesson[embed_code]" style="width: 410px; font-size: large; padding-left: 10px;">
+		<select name="lesson[embed_code]" class="input" style="height: 40px; width: 420px; font-size: large; padding-left: 10px;">
 			<% @results.each do |result| %>
 		  	<option value="<%= result["id"] %>" selected="selected"><%= result["title"] %></option>
 			<% end %>
@@ -16,11 +16,12 @@
 		www.quickstream.in/<%= f.text_field :name, value: nil, placeholder: "Name Your Lesson", class: "input", style: "width: 400px; margin-bottom: 0; font-size: large;" %>
 	</div>
 
-	<div class="span12" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 135px;">
-		<%= f.text_area :notes, placeholder: 'Notes', class: "input", style: "width: 400px; height: 200px; font-size: large;" %>
+	<div class="span12" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 112px;">
+		Notes
+		<%= f.text_area :notes, placeholder: 'Enter notes, links, etc here.', class: "input", style: "width: 400px; height: 200px; font-size: large;" %>
 	</div>
 
-  <div class="form-actions" style="margin-left: 240px">
+  <div class="form-actions" style="margin-left: 246px">
     <%= f.submit nil, :class => 'btn btn-primary btn-large' %>
     <%= link_to 'Cancel', root_url, :class => 'btn btn-large' %>
   </div>
