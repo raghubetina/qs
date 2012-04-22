@@ -1,3 +1,7 @@
+jQuery ->
+  $('#lesson_name').autocomplete
+    source: $('#lesson_name').data('autocomplete-source')
+
 return unless $("#lesson_id").length > 0
 numberOfPeople = 0
 

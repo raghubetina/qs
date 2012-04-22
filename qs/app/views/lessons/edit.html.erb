@@ -1,1 +1,19 @@
-<%= render :partial => 'form' %>
+<%= form_for @lesson, :html => { :class => 'form-horizontal' } do |f| %>
+	<div class="span10" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 118px">
+		Ustream Channel ID:
+		<%= @lesson.embed_code %>
+	</div>
+
+	<div class="span12" style="text-align: center; font-size: x-large; margin-bottom: 40px">
+		www.quickstream.in/<%= f.text_field :name, value: nil, placeholder: "Name Your Lesson", class: "input", style: "width: 400px; margin-bottom: 0; font-size: large;" %>
+	</div>
+	
+	<div class="span12" style="text-align: center; font-size: x-large; margin-bottom: 40px">
+		<%= f.text_area :notes, class: "input", style: "width: 400px; margin-bottom: 0; font-size: large;" %>
+	</div>
+
+  <div class="form-actions" style="margin-left: 240px">
+    <%= f.submit nil, :class => 'btn btn-primary btn-large' %>
+    <%= link_to 'Cancel', root_url, :class => 'btn btn-large' %>
+  </div>
+<% end %>

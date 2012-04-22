@@ -1,30 +1,19 @@
 <%= form_for @lesson, :html => { :class => 'form-horizontal' } do |f| %>
-  <fieldset>
-    <legend><%= controller.action_name.capitalize %> /Lesson</legend>
+	<div class="span10" style="text-align: center; font-size: x-large; margin-bottom: 40px; margin-left: 118px">
+		Ustream Channel
+		<select name="lesson[embed_code]" style="width: 410px; font-size: large; padding-left: 10px;">
+			<% @results.each do |result| %>
+		  	<option value="<%= result["id"] %>" selected="selected"><%= result["title"] %></option>
+			<% end %>
+		</select>
+	</div>
 
-    <div class="control-group">
-      <%= f.label :name, :class => 'control-label' %>
-      <div class="controls">
-        www.quickstream.in/<%= f.text_field :name, :class => 'text_field' %>
-      </div>
-    </div>
+	<div class="span12" style="text-align: center; font-size: x-large; margin-bottom: 40px">
+		www.quickstream.in/<%= f.text_field :name, value: nil, placeholder: "Name Your Lesson", class: "input", style: "width: 400px; margin-bottom: 0; font-size: large;" %>
+	</div>
 
-    <div class="control-group">
-      <%= f.label :embed_code, :class => 'control-label' %>
-      <div class="controls">
-        <select name="lesson[embed_code]">
-					<% @results.each do |result| %>
-				  	<option value="<%= result["id"] %>" selected="selected"><%= result["title"] %></option>
-					<% end %>
-				</select>
-      </div>
-    </div>
-
-
-
-    <div class="form-actions">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
-      <%= link_to 'Cancel', lessons_path, :class => 'btn' %>
-    </div>
-  </fieldset>
+  <div class="form-actions" style="margin-left: 240px">
+    <%= f.submit nil, :class => 'btn btn-primary btn-large' %>
+    <%= link_to 'Cancel', root_url, :class => 'btn btn-large' %>
+  </div>
 <% end %>

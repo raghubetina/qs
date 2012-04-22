@@ -16,9 +16,10 @@ ActiveRecord::Schema.define(:version => 20120422013737) do
   create_table "lessons", :force => true do |t|
     t.string   "name"
     t.string   "embed_code"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.text     "notes"
+    t.string   "ustream_user_id"
   end
 
   create_table "questions", :force => true do |t|

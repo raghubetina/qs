@@ -1,8 +1,13 @@
 <div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
+
+<div class="span12" style="text-align: center">
+  <p style="font-style: italic; font-size: 200%; margin-bottom: 30px"><%= @lesson.name %></p>
+</div><br/><br/>
+
 <div id="question-list" class="span4">
-    <div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", class: "span3", placeholder: "Ask a question" %></div>
+    <div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 250px;" %></div>
     <% @lesson.questions.order("created_at DESC").each do |question| %>
-      <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary btn-large span3 <%= question.is_answered ? "answered" : nil %>"><%= question.content %></div>
+      <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary <%= question.is_answered ? "answered" : nil %>" style="width: 241px"><%= question.content %></div>
     <% end %>
 </div>
 
@@ -12,7 +17,7 @@
   </div>
 
   <div class="row">
-    <%= @lesson.notes %>
+    <pre style="width: 590px; margin-top: 30px"><%= simple_format(@lesson.notes) %></pre>
   </div>
 </div>
 
