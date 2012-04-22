@@ -4,11 +4,18 @@ Qs::Application.routes.draw do
   
   get 'lessons/start'
   
+  get 'lessons/find_name'
+  
+  post 'lessons/show'
+  post 'lessons/new'
+  
   resources :votes
 
   resources :questions
 
   resources :lessons
+  
+  get '/:name', :controller => 'lessons', :action => 'show'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

@@ -26,15 +26,21 @@
     <div class="container">
       <div class="content">
 				<div class="row">
-					<h1 class="span4"><a href="/">Question Stream</a></h1>
+					<div class="span12" style="text-align: center; margin-top: 50px; margin-bottom: 20px;">
+						<a href="/"><h1 style="font-size: 350%; font-weight: normal">Question Stream</h1></a>
+					</div>
+				</div>
+        <div class="row" style="height: 50px;">
+					<% if flash[:notice] %>
+					  <div class="span8 alert alert-info" style="margin: 0 0 0 155px; text-align: center">
+					    <a class="close" data-dismiss="alert">×</a>
+					    <%= flash[:notice] %>
+					  </div>
+					<% else %>
+						<div class="span8 offset2">&nbsp;</div>
+					<% end %>
 				</div>
 				<div class="row">
-					&nbsp;
-				</div>
-        <div class="row">
-					<% if flash[:notice] %>
-						<div class="alert alert-info"><%= flash[:notice] %></div>
-					<% end %>
           <%= yield %>
         </div><!--/row-->
       </div><!--/content-->

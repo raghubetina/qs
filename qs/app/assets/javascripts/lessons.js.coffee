@@ -2,6 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+jQuery ->
+  $('#lesson_name').autocomplete
+    source: $('#lesson_name').data('autocomplete-source')
 
 return unless $("#lesson_id").length > 0
 numberOfPeople = 0

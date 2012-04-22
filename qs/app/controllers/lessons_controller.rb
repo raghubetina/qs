@@ -7,6 +7,11 @@ class LessonsController < ApplicationController
   def start
   end
   
+  def find_name
+    @lessons = Lesson.order(:name).where("name like ?", "%#{params[:term]}%")
+    render json: @lessons.map(&:name)
+  end
+  
   def index
     @lessons = Lesson.all
 
@@ -19,11 +24,19 @@ class LessonsController < ApplicationController
   # GET /lessons/1
   # GET /lessons/1.json
   def show
-    @lesson = Lesson.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render json: @lesson }
+    if params[:name]
+      if l = Lesson.find_by_name(params[:name])
+        @lesson = l
+      else
+        redirect_to root_url, notice: "There is no lesson by that name."
+      end
+    else
+      @lesson = Lesson.find(params[:id])
+      
+      respond_to do |format|
+        format.html # show.html.erb
+        format.json { render json: @lesson }
+      end
     end
   end
 
@@ -53,15 +66,12 @@ class LessonsController < ApplicationController
   def create
     @lesson = Lesson.new(params[:lesson])
     
-    @lesson.embed_code = @lesson.embed_code.gsub('width="320"', 'width="608"')
-    @lesson.embed_code = @lesson.embed_code.gsub('height="260"', 'height="368"')
-    
     respond_to do |format|
       if @lesson.save
-        format.html { redirect_to @lesson, notice: 'Lesson was successfully created.' }
+        format.html { redirect_to "/#{@lesson.name}" }
         format.json { render json: @lesson, status: :created, location: @lesson }
       else
-        format.html { render action: "new" }
+        format.html { redirect_to root_url, notice: 'Something went wrong. Please try again.' }
         format.json { render json: @lesson.errors, status: :unprocessable_entity }
       end
     end
