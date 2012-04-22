@@ -102,7 +102,7 @@ load_playback = ->
     callback = ((action, arg) ->
       -> EventHandler[action](arg)
     )(action, arg)
-    setTimeout(callback, time*1000)
+    setTimeout(callback, 230*1000)
 
 $ ->
   if $("#lesson_id").length > 0
