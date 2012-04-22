@@ -3,7 +3,7 @@
 </div>
 <div class="span12" style="text-align: center">	
 	<%= form_tag '/lessons/new' do %>
-		<%= text_field_tag :ustream_user_id, value = nil, placeholder: "Enter Ustream Username", class: "input", style: "width: 400px; height: 40px; margin-bottom: 0; font-size: x-large; padding-left: 10px;" %>
+		<%= text_field_tag :ustream_user_id, value = nil, placeholder: "Enter Ustream Username", class: "input", style: "width: 400px; height: 30px; margin-bottom: 0; font-size: x-large; padding-left: 10px;" %>
 		<%= submit_tag 'Find Channels', class: "btn btn-primary", style: "width: 150px; height: 50px; font-size: large" %>
 	<% end %>
 </div>
@@ -17,7 +17,7 @@
 </div>
 <div class="span12" style="text-align: center">	
 	<%= form_tag '/lessons/show' do %>
-		<%= text_field_tag :name, value = nil, placeholder: "Enter Lesson Name", class: "input", id: "lesson_name", style: "width: 400px; height: 40px; margin-bottom: 0; font-size: x-large; padding-left: 10px;", data: {autocomplete_source: '/lessons/find_name'} %>
+		<%= text_field_tag :name, value = nil, placeholder: "Enter Lesson Name", class: "input", id: "lesson_name", style: "width: 400px; height: 30px; margin-bottom: 0; font-size: x-large; padding-left: 10px;", data: {autocomplete_source: '/lessons/find_name'} %>
 		<%= submit_tag 'Go To Lesson', class: "btn btn-primary", style: "width: 150px; height: 50px; font-size: large" %>
 	<% end %>
 </div>
