@@ -35,8 +35,8 @@ class Connection
     text = CGI.escapeHTML text
     id = $questions.insert(
                     content: text,
-                    created_at: Time.now,
-                    updated_at: Time.now,
+                    created_at: Time.now.utc,
+                    updated_at: Time.now.utc,
                     lesson_id: @lesson[:id])
     send_to_all(question: {text: text, id: id})
   end
@@ -51,8 +51,8 @@ class Connection
   def vote id
     return unless $votes.filter(user_id: @id, question_id: id).count.zero?
     $votes.insert(
-           created_at: Time.now,
-           updated_at: Time.now,
+           created_at: Time.now.utc,
+           updated_at: Time.now.utc,
            user_id: @id,
            question_id: id
            )
