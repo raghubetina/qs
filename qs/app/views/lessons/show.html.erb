@@ -1,4 +1,9 @@
-<div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
+<% if @video_id %>
+	 We found an old video -- we need to load question data here
+<% else %>
+	<div id="lesson_id" style="display: none;"><%= @lesson.id %></div>
+<% end %>
+
 
 <div class="span12" style="text-align: center">
   <p style="font-style: italic; font-size: 200%; margin-bottom: 30px"><%= @lesson.name %></p>
@@ -7,13 +12,17 @@
 <div id="question-list" class="span4">
     <div id="new_question_div"><%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 255px;" %></div>
     <% @lesson.questions.order("created_at DESC").each do |question| %>
-      <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary <%= question.is_answered ? "answered" : nil %>"><%= question.content %></div>
+      <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary"><%= question.content %></div>
     <% end %>
 </div>
 
 <div class="span8">
   <div class="row">
-    <iframe src="http://www.ustream.tv/embed/<%= @lesson.embed_code %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br />
+		<% if @video_id %>
+			<iframe src="http://www.ustream.tv/embed/recorded/<%= @video_id %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe>
+		<% else %>
+    	<iframe src="http://www.ustream.tv/embed/<%= @lesson.embed_code %>" width="608" height="368" scrolling="no" frameborder="0" style="border: 0px none transparent;"></iframe><br />
+		<% end %>
   </div>
 
   <div class="row">

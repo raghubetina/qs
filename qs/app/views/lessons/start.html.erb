@@ -1,5 +1,5 @@
 <div class="span12" style="text-align: center">
-	<p style="font-style: italic; font-size: x-large; margin-bottom: 25px;">Create A Lesson</p>
+	<p style="font-style: italic; font-size: x-large; margin-bottom: 25px;">Create A Session</p>
 </div>
 <div class="span12" style="text-align: center">	
 	<%= form_tag '/lessons/new' do %>
@@ -13,11 +13,11 @@
 </div>
 
 <div class="span12" style="text-align: center">
-	<p style="font-style: italic; font-size: x-large; margin-bottom: 25px;">Join A Lesson</p>
+	<p style="font-style: italic; font-size: x-large; margin-bottom: 25px;">Join A Session</p>
 </div>
 <div class="span12" style="text-align: center">	
 	<%= form_tag '/lessons/show' do %>
-		<%= text_field_tag :name, value = nil, placeholder: "Enter Lesson Name", class: "input", id: "lesson_name", style: "width: 400px; height: 30px; margin-bottom: 0; font-size: x-large; padding-left: 10px;", data: {autocomplete_source: '/lessons/find_name'} %>
-		<%= submit_tag 'Go To Lesson', class: "btn btn-primary", style: "width: 150px; height: 50px; font-size: large" %>
+		<%= text_field_tag :name, value = nil, placeholder: "Enter Session Name", class: "input", id: "lesson_name", style: "width: 400px; height: 30px; margin-bottom: 0; font-size: x-large; padding-left: 10px;", data: {autocomplete_source: '/lessons/find_name'} %>
+		<%= submit_tag 'Go To Session', class: "btn btn-primary", style: "width: 150px; height: 50px; font-size: large" %>
 	<% end %>
 </div>

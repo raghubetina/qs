@@ -28,16 +28,33 @@ class LessonsController < ApplicationController
       if l = Lesson.find_by_name(params[:name])
         @lesson = l
       else
-        redirect_to root_url, notice: "There is no lesson by that name."
+        redirect_to root_url, notice: "There is no session by that name."
       end
     else
       @lesson = Lesson.find(params[:id])
-      
-      respond_to do |format|
-        format.html # show.html.erb
-        format.json { render json: @lesson }
-      end
     end
+    
+    @channel_status = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/getInfo?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]["status"]
+    
+    if @channel_status == "offline"
+      @channel_videos = JSON.parse(open("http://api.ustream.tv/json/channel/#{@lesson.embed_code}/listAllVideos?key=ACC93DE5C684A1B334D50C0B082A84EA").read)["results"]
+      @video_times = @channel_videos.map{ |video| { id: video["id"], start: start = Time.parse(video["createdAt"]).utc, end: start + video["lengthInSecond"].to_f } }
+      
+      
+    
+      @lesson.questions.each do |question|
+        @video_times.each do |video_time|
+          time_range = video_time[:start]..video_time[:end]
+          if time_range.cover?(question.created_at)
+            @video_id = video_time[:id]
+          end
+        end
+      end
+      
+      
+    end
+    
+    
   end
 
   # GET /lessons/new
@@ -85,7 +102,7 @@ class LessonsController < ApplicationController
 
     respond_to do |format|
       if @lesson.update_attributes(params[:lesson])
-        format.html { redirect_to @lesson, notice: 'Lesson was successfully updated.' }
+        format.html { redirect_to @lesson, notice: 'Session was successfully updated.' }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
