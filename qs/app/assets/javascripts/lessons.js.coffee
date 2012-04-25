@@ -7,13 +7,17 @@ numberOfPeople = 0
 
 class Socket
   constructor: (url) ->
+    console.log 'ws'
     @ws = new WebSocket(url)
     @ws.onopen = => @send(lesson_id: $("#lesson_id").text())
     @ws.onmessage = (e) => @onmessage(e)
   send: (hash) ->
+    console.log 'send', hash
     @ws.send(JSON.stringify(hash))
   onmessage: (e) ->
+    console.log 'message', e
     for key, value of JSON.parse(e.data)
+      console.log key, value
       EventHandler[key](value)
 
 EventHandler =
@@ -23,6 +27,7 @@ EventHandler =
     Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   visit: (i) ->
+    console.log 'visit', i
     numberOfPeople += i
     for id, question of Question.questions
       question.colorize()
@@ -82,6 +87,7 @@ add_vote_click_handler = ->
   )
 
 load_realtime = ->
+  console.log 'asdf'
   window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13

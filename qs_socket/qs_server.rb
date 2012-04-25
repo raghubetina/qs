@@ -26,8 +26,7 @@ class Connection
   end
 
   def close
-    @lesson[:number_of_connections] -= 1
-    visit -1
+    visit(-1)
     @channel.unsubscribe @sid
   end
 
@@ -77,7 +76,6 @@ class Connection
     @lesson = @@lessons[lesson_id]
     @channel = @lesson[:channel]
     send_to_me(visit: @lesson[:number_of_connections])
-    @lesson[:number_of_connections] += 1
     @sid = @channel.subscribe { |data| @ws.send(data) }
     visit(1)
   end
@@ -87,6 +85,7 @@ class Connection
             updated_at: Time.now.utc,
             delta: i,
             lesson_id: @lesson[:id])
+    @lesson[:number_of_connections] += i
     send_to_all(visit: i)
   end
 
