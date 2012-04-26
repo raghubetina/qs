@@ -21,20 +21,16 @@ question_timer = ->
   return if ta.length is 0
   width = ta.outerWidth()
   height = ta.outerHeight()
-  outer = $("<div>").
-    css('background-color': '#bbb', position: 'abosolute', top: 0, left: 0, 'z-index': 11).
-    height(height).width(width)
-  inner = $("<div>").
-    css('background-color', '#555').
-    height(height).width(0)
+  outer = $("<div>").addClass('outer').height(height).width(width)
+  inner = $("<div>").addClass('inner').height(height).width(0)
   inner.appendTo(outer)
   outer.prependTo("#new_question_div")
-  ta.fadeOut(700)
-  inner.animate({width: '100%'}, 15000, ->
-    ta.fadeIn(500)
-    r = -> $(this).remove()
-    inner.fadeOut(500, r)
-    outer.fadeOut(500, r)
+  ta.fadeOut(700).blur()
+  inner.animate({width: '100%'}, 10000, ->
+    ta.fadeIn(700, ->
+      inner.remove()
+      outer.remove()
+    )
   )
 
 

@@ -21,3 +21,13 @@
 	color: #E8D069;
 }
 
+#new_question_div .outer {
+	background-color: #bbb;
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+
+#new_question_div .inner {
+	background-color: #555;
+}
