@@ -1,5 +1,7 @@
 #new_question_div {
 	margin-bottom: 0px;
+	height: 69px;
+	position: relative;
 }
 
 .question_div {
@@ -8,9 +10,14 @@
 }
 
 #question_input {
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 10;
 }
 
 #question-list .question_div {
 	width: 241px;
 	color: #E8D069;
 }
+

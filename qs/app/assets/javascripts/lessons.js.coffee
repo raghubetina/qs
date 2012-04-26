@@ -7,27 +7,46 @@ numberOfPeople = 0
 
 class Socket
   constructor: (url) ->
-    console.log 'ws'
     @ws = new WebSocket(url)
     @ws.onopen = => @send(lesson_id: $("#lesson_id").text())
     @ws.onmessage = (e) => @onmessage(e)
   send: (hash) ->
-    console.log 'send', hash
     @ws.send(JSON.stringify(hash))
   onmessage: (e) ->
-    console.log 'message', e
     for key, value of JSON.parse(e.data)
-      console.log key, value
       EventHandler[key](value)
+
+question_timer = ->
+  ta = $("#question_input")
+  return if ta.length is 0
+  width = ta.outerWidth()
+  height = ta.outerHeight()
+  outer = $("<div>").
+    css('background-color': '#bbb', position: 'abosolute', top: 0, left: 0, 'z-index': 11).
+    height(height).width(width)
+  inner = $("<div>").
+    css('background-color', '#555').
+    height(height).width(0)
+  inner.appendTo(outer)
+  outer.prependTo("#new_question_div")
+  ta.fadeOut(700)
+  inner.animate({width: '100%'}, 15000, ->
+    ta.fadeIn(500)
+    r = -> $(this).remove()
+    inner.fadeOut(500, r)
+    outer.fadeOut(500, r)
+  )
+
+
 
 EventHandler =
   question: (x) ->
+    question_timer() unless playback_has_started
     Question.create(x.text, x.id)
   vote: (id) ->
     Question.find(id).mark_vote()
   answer: (id) -> Question.find(id).mark_answer()
   visit: (i) ->
-    console.log 'visit', i
     numberOfPeople += i
     for id, question of Question.questions
       question.colorize()
@@ -87,7 +106,6 @@ add_vote_click_handler = ->
   )
 
 load_realtime = ->
-  console.log 'asdf'
   window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13
