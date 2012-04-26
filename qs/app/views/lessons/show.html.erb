@@ -5,9 +5,15 @@
 <% end %>
 
 <div class="span12" style="text-align: center">
-  <p style="font-style: italic; font-size: 200%; margin-bottom: 30px"><%= @lesson.name %> | <span style="text-transform: uppercase; color: #ccc"><span id="num_visits">0</span> people</span></p>
-	
-</div><br/>
+  <p style="font-style: italic; font-size: 200%; margin-bottom: 30px">
+    <%= @lesson.name %> |
+    <span style="text-transform: uppercase; color: #ccc">
+      <span id="num_visits">0</span>
+       people
+    </span>
+  </p>
+</div>
+<br/>
 
 <div id="question-list" class="span4">
     <div id="new_question_div">
@@ -18,9 +24,9 @@
       <% end %>
     </div>
     <% unless @video_id %>
-    <% @lesson.questions.order("created_at DESC").each do |question| %>
-      <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary"><%= question.content %></div>
-    <% end %>
+      <% @lesson.questions.order("created_at DESC").each do |question| %>
+        <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary"><%= question.content %></div>
+      <% end %>
     <% end %>
 </div>
 
@@ -34,7 +40,9 @@
   </div>
 
   <div class="row">
-    <pre id="teacher_note" style="width: 578px; margin-top: 30px; padding: 15px;"><%= simple_format(@lesson.notes) %></pre>
+    <pre id="teacher_note" style="width: 578px; margin-top: 30px; padding: 15px;">
+      <%= simple_format(@lesson.notes) %>
+    </pre>
   </div>
 </div>
 
