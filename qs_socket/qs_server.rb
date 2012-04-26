@@ -19,24 +19,24 @@ class Connection
 
   def new_message msg
     message = JSON.parse msg
-    p message
     message.each do |key, value|
-      send(key.to_sym, value) if %w(question answer note vote lesson_id).include? key
+      unless %w(question note vote lesson_id).include? key
+        puts "INVALID VERB: #{key}"
+        next
+      end
+      if @lesson.nil? && key != 'lesson_id'
+        puts "User not in lesson yet.  Can only set lesson_id."
+        next
+      end
+      send(key.to_sym, value)
     end
-  end
-
-  def close
-    visit(-1)
-    @channel.unsubscribe @sid
   end
 
   def question text
     text = CGI.escapeHTML text
     id = $questions.insert(
-                    content: text,
-                    created_at: Time.now.utc,
-                    updated_at: Time.now.utc,
-                    lesson_id: @lesson[:id])
+                    content: text, created_at: Time.now.utc,
+                    updated_at: Time.now.utc, lesson_id: @lesson[:id])
     send_to_all(question: {text: text, id: id})
   end
 
@@ -50,18 +50,9 @@ class Connection
   def vote id
     return unless $votes.filter(user_id: @id, question_id: id).count.zero?
     $votes.insert(
-           created_at: Time.now.utc,
-           updated_at: Time.now.utc,
-           user_id: @id,
-           question_id: id
-           )
+           created_at: Time.now.utc, updated_at: Time.now.utc,
+           user_id: @id, question_id: id)
     send_to_all(vote: id)
-  end
-
-  def answer id
-    return unless @teacher
-    $questions.filter(id: id).update(is_answered: true)
-    send_to_all(answer: id)
   end
 
   def lesson_id lesson_id
@@ -87,6 +78,16 @@ class Connection
             lesson_id: @lesson[:id])
     @lesson[:number_of_connections] += i
     send_to_all(visit: i)
+  end
+
+  def close
+    return if @lesson.nil?
+    @channel.unsubscribe @sid
+    visit(-1)
+    if @lesson[:number_of_connections].zero?
+      @@lessons.delete @lesson[:id]
+      @channel = @lesson = nil
+    end
   end
 
   def send_to_me hash
