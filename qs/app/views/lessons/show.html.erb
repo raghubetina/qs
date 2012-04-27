@@ -29,7 +29,7 @@
              data-votes="<%= question.votes.count %>"
              class="question_div btn btn-primary">
           <i class="hide icon-thumbs-up"></i>
-          <%= question.content %>
+          <%= question.content.html_safe %>
         </div>
       <% end %>
     <% end %>
