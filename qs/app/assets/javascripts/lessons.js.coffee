@@ -36,8 +36,7 @@ question_timer = ->
 
 
 EventHandler =
-  question: (x) ->
-    question_timer() unless playback_has_started
+  question: (x, source) ->
     Question.create(x.text, x.id)
   vote: (id) ->
     Question.find(id).mark_vote()
@@ -127,6 +126,7 @@ load_realtime = ->
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13
     socket.send(question: $(this).val())
+    question_timer()
     $(this).val("")
     false
   )
