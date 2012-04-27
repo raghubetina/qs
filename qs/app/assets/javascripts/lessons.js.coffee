@@ -68,6 +68,7 @@ class Question
     @dom = $(html).insertAfter("#new_question_div")
     @colorize()
   getVotes: -> parseInt(@dom.attr('data-votes'))
+  getTime: -> parseInt(@dom.attr('data-time'))
   setVotes: (i) -> @dom.attr('data-votes', i)
   answer: -> socket.send(answer: @id)
   mark_answer: -> @dom.addClass('answered')
@@ -89,6 +90,14 @@ class Question
     @dom.css('background-color', "hsl(355, 100%, #{luminance}%)")
     luminance = if luminance > 70 then 0 else 100
     @dom.css('color', "hsl(48, 0%, #{luminance}%)")
+  @sortByHeat: -> Question.sortBy(((a,b) -> b.getVotes() - a.getVotes()))
+  @sortByTime: -> Question.sortBy(((a,b) -> b.getTime() - a.getTime()))
+  @sortBy: (cmp)->
+    questions = for id, question of Question.questions
+      question.dom.detach()
+      question
+    for question in questions.sort(cmp)
+      question.dom.appendTo("#question-list")
   @find: (id) ->
     Question.questions[id]
   @find_in_dom: ->
