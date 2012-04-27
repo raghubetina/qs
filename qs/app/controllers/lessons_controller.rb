@@ -25,7 +25,7 @@ class LessonsController < ApplicationController
   # GET /lessons/1.json
   def show
     if params[:name]
-      if l = Lesson.find_by_name(params[:name])
+      if l = Lesson.find_by_name(params[:name].downcase)
         @lesson = l
       else
         redirect_to root_url, notice: "There is no session by that name."
@@ -92,7 +92,7 @@ class LessonsController < ApplicationController
   # POST /lessons.json
   def create
     @lesson = Lesson.new(params[:lesson])
-    @lesson.name = CGI::escape(@lesson.name)
+    @lesson.name = CGI::escape(@lesson.name).downcase
 
     respond_to do |format|
       if @lesson.save
