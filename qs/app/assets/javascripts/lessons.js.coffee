@@ -49,7 +49,14 @@ EventHandler =
     $("#num_visits").text(numberOfPeople)
   note: (text) -> $("#teacher_note").html(text)
 
+template = (html, hash) ->
+  for key, value of hash
+    html = html.replace("{{#{key}}}", value)
+  html
+
 class Question
+  @html: """<div data-id="{{id}}" data-votes="0" class="question_div btn btn-primary">
+              <i class="hide icon-thumbs-up"></i> {{text}} </div>"""
   @questions: {}
   constructor: (@text, @id) ->
     Question.questions[@id] = this
@@ -57,18 +64,21 @@ class Question
     q = new Question(text, id)
     q.create_dom()
   create_dom: ->
-    @dom = $("<div>").
-      html(@text).
-      addClass("btn btn-primary span3 question_div").
-      insertAfter("#new_question_div")
-    @setVotes(0)
-    @dom.attr('data-id', @id)
+    html = template(Question.html, {id: @id, text: @text})
+    @dom = $(html).insertAfter("#new_question_div")
     @colorize()
   getVotes: -> parseInt(@dom.attr('data-votes'))
   setVotes: (i) -> @dom.attr('data-votes', i)
   answer: -> socket.send(answer: @id)
   mark_answer: -> @dom.addClass('answered')
-  vote: -> socket.send(vote: @id)
+  vote: ->
+    return if @voted_on
+    @voted_on = true
+    @dom.children('i').removeClass('hide')
+    socket.send(vote: @id)
+  hover: ->
+    return if @voted_on
+    @dom.children('i').toggleClass('hide')
   mark_vote: ->
     @setVotes(@getVotes() + 1)
     @colorize()
@@ -95,10 +105,12 @@ window.question = Question
 isTeacher = socket = undefined
 
 add_vote_click_handler = ->
-  $("#question-list").on('click', '.question_div', ->
-    id = parseInt($(this).attr('data-id'))
-    question = Question.find(id)
-    question.vote()
+  question = (t) -> Question.find(parseInt($(t).attr('data-id')))
+  $("#question-list").on('click', '.question_div',
+    (-> question(this).vote())
+  ).on('hover', '.question_div',
+    (-> question(this).hover()),
+    (-> question(this).hover())
   )
 
 load_realtime = ->

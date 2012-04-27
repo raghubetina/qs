@@ -5,8 +5,10 @@
 }
 
 .question_div {
-	margin: 0 0 5px 0;
+	position: relative;
+	margin: 0 0 5px 0px;
 	text-align: left;
+	padding: 8px 7px 8px 25px;
 }
 
 #question_input {
@@ -31,3 +33,14 @@
 #new_question_div .inner {
 	background-color: #555;
 }
+
+.icon-thumbs-up {
+	background-position: -96px -144px;
+	position: absolute;
+	left: 5px;
+}
+
+.icon-thumbs-up.hide {
+	display: none;
+}
+

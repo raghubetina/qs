@@ -25,7 +25,12 @@
     </div>
     <% unless @video_id %>
       <% @lesson.questions.order("created_at DESC").each do |question| %>
-        <div data-id="<%= question.id %>" data-votes="<%= question.votes.count %>" class="question_div btn btn-primary"><%= question.content %></div>
+        <div data-id="<%= question.id %>"
+             data-votes="<%= question.votes.count %>"
+             class="question_div btn btn-primary">
+          <i class="hide icon-thumbs-up"></i>
+          <%= question.content %>
+        </div>
       <% end %>
     <% end %>
 </div>
