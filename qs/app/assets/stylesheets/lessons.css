@@ -40,3 +40,17 @@
 	top: 10px;
 }
 
+#question-list {
+	position: relative;
+}
+
+#sort_buttons {
+	position: absolute;
+	top: 69px;
+	left: -95px;
+}
+
+#sort_buttons div {
+	width: 12px;
+	height: 12px;
+}

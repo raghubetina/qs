@@ -16,6 +16,10 @@
 <br/>
 
 <div id="question-list" class="span4">
+    <div class="btn-group" id="sort_buttons">
+      <div class="btn"><i class="icon-fire icon-large"></i></div>
+      <div class="btn"><i class="icon-time icon-large"></i></div>
+    </div>
     <div id="new_question_div">
       <% unless @video_id %>
         <%= text_area_tag :content, value = nil, id: "question_input", placeholder: "Ask a question", style: "width: 255px;" %>

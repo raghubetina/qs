@@ -33,8 +33,6 @@ question_timer = ->
     )
   )
 
-
-
 EventHandler =
   question: (x, source) ->
     Question.create(x.text, x.id)
@@ -58,6 +56,7 @@ class Question
                class="question_div btn btn-primary">
                <i class="icon-star-empty"></i> {{text}} </div>"""
   @questions: {}
+  @sortedBy: 'time'
   constructor: (@text, @id) ->
     Question.questions[@id] = this
   @create: (text, id) ->
@@ -66,7 +65,10 @@ class Question
   create_dom: ->
     time = Math.floor(new Date().getTime() / 1000)
     html = template(Question.html, {id: @id, text: @text, time: time})
-    @dom = $(html).insertAfter("#new_question_div")
+    if Question.sortedBy is 'time'
+      @dom = $(html).insertAfter("#new_question_div")
+    else
+      @dom = $(html).appendTo("#question-list")
     @colorize()
   getVotes: -> parseInt(@dom.attr('data-votes'))
   getTime: -> parseInt(@dom.attr('data-time'))
@@ -91,9 +93,15 @@ class Question
     @dom.css('background-color', "hsl(355, 100%, #{luminance}%)")
     luminance = if luminance > 70 then 0 else 100
     @dom.css('color', "hsl(48, 0%, #{luminance}%)")
-  @sortByHeat: -> Question.sortBy(((a,b) -> b.getVotes() - a.getVotes()))
-  @sortByTime: -> Question.sortBy(((a,b) -> b.getTime() - a.getTime()))
-  @sortBy: (cmp)->
+  @sortByHeat: ->
+    @sortedBy = 'votes'
+    @sort()
+  @sortByTime: ->
+    @sortedBy = 'time'
+    @sort()
+  @sort: ->
+    cmp_attr = if @sortedBy is 'time' then 'getTime' else 'getVotes'
+    cmp = (a,b) -> b[cmp_attr]() - a[cmp_attr]()
     questions = for id, question of Question.questions
       question.dom.detach()
       question
@@ -123,6 +131,12 @@ add_vote_click_handler = ->
     (-> question(this).hover())
   )
 
+add_sort_click_handler = ->
+  $("#sort_buttons .btn").click ->
+    icon = $(this).children('i')
+    sort = if icon.hasClass('icon-fire') then 'Heat' else 'Time'
+    Question["sortBy#{sort}"]()
+
 load_realtime = ->
   window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
@@ -134,6 +148,7 @@ load_realtime = ->
   )
   Question.find_in_dom()
   add_vote_click_handler()
+  add_sort_click_handler()
 
 playback_has_started = false
 load_playback = ->
