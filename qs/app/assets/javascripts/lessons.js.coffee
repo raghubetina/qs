@@ -54,8 +54,9 @@ template = (html, hash) ->
   html
 
 class Question
-  @html: """<div data-id="{{id}}" data-votes="0" class="question_div btn btn-primary">
-              <i class="hide icon-thumbs-up"></i> {{text}} </div>"""
+  @html: """<div data-id="{{id}}" data-votes="0" data-time="{{time}}"
+               class="question_div btn btn-primary">
+               <i class="icon-star-empty"></i> {{text}} </div>"""
   @questions: {}
   constructor: (@text, @id) ->
     Question.questions[@id] = this
@@ -63,7 +64,8 @@ class Question
     q = new Question(text, id)
     q.create_dom()
   create_dom: ->
-    html = template(Question.html, {id: @id, text: @text})
+    time = Math.floor(new Date().getTime() / 1000)
+    html = template(Question.html, {id: @id, text: @text, time: time})
     @dom = $(html).insertAfter("#new_question_div")
     @colorize()
   getVotes: -> parseInt(@dom.attr('data-votes'))
@@ -74,11 +76,11 @@ class Question
   vote: ->
     return if @voted_on
     @voted_on = true
-    @dom.children('i').removeClass('hide')
+    @dom.children('i').removeClass('icon-star-empty').addClass('icon-star')
     socket.send(vote: @id)
   hover: ->
-    return if @voted_on
-    @dom.children('i').toggleClass('hide')
+    return if @voted_on and not @dom.children('i').hasClass('icon-large')
+    @dom.children('i').toggleClass('icon-large')
   mark_vote: ->
     @setVotes(@getVotes() + 1)
     @colorize()

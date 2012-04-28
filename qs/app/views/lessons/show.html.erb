@@ -29,7 +29,7 @@
              data-votes="<%= question.votes.count %>"
              data-time="<%= question.created_at.to_i %>"
              class="question_div btn btn-primary">
-          <i class="hide icon-thumbs-up"></i>
+          <i class="icon-star-empty"></i>
           <%= question.content.html_safe %>
         </div>
       <% end %>

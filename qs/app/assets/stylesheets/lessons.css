@@ -34,13 +34,9 @@
 	background-color: #555;
 }
 
-.icon-thumbs-up {
-	background-position: -144px 0;
+.icon-star-empty, .icon-star {
 	position: absolute;
 	left: 5px;
-}
-
-.icon-thumbs-up.hide {
-	display: none;
+	top: 10px;
 }
 
