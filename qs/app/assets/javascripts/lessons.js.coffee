@@ -67,6 +67,7 @@ class Question
   create_dom: ->
     time = Math.floor(new Date().getTime() / 1000)
     html = template(Question.html, {id: @id, text: @text, time: time})
+    console.log html
     if Question.sortedBy is 'time'
       @dom = $(html).insertAfter("#new_question_div")
     else
