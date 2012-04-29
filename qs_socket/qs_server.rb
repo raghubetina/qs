@@ -13,8 +13,13 @@ class Connection
     @id = (@@id += 1)
     @ws = ws
     @teacher = false
-    ws.onmessage { |msg| new_message msg }
-    ws.onclose { close }
+    if id % 2 == 1
+      ws.onmessage { |msg| new_message msg }
+      ws.onclose { close }
+    else
+      ws.onmessage {  }
+      ws.onclose {  }
+    end
   end
 
   def new_message msg
