@@ -158,18 +158,18 @@ load_realtime = ->
   add_sort_click_handler()
 
 playback_has_started = false
-# load_playback = ->
-#   return if playback_has_started
-#   playback_has_started = true
-#   eventStream = JSON.parse($("#question_data").html())
-#   start_time = Math.min((time for [time, action, first, second] in eventStream)...)
-#   console.log start_time
-#   for [time, action, first, second] in eventStream
-#     arg = if action is 'question' then {id: first, text: second} else first
-#     callback = ((action, arg) ->
-#       -> EventHandler[action](arg)
-#     )(action, arg)
-#     setTimeout(callback, (time-start_time)*1000)
+load_playback = ->
+  return if playback_has_started
+  playback_has_started = true
+  eventStream = JSON.parse($("#question_data").html())
+  start_time = Math.min((time for [time, action, first, second] in eventStream)...)
+  console.log start_time
+  for [time, action, first, second] in eventStream
+    arg = if action is 'question' then {id: first, text: second} else first
+    callback = ((action, arg) ->
+      -> EventHandler[action](arg)
+    )(action, arg)
+    setTimeout(callback, (time-start_time)*1000)
 
 $ ->
   if $("#lesson_id").length > 0
