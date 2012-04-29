@@ -11,6 +11,7 @@ class Socket
     @ws.onopen = => @send(lesson_id: $("#lesson_id").text())
     @ws.onmessage = (e) => @onmessage(e)
   send: (hash) ->
+    return if hash.message is ''
     @ws.send(JSON.stringify(hash))
   onmessage: (e) ->
     for key, value of JSON.parse(e.data)
