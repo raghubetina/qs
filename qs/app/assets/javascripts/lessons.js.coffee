@@ -5,8 +5,11 @@ jQuery ->
 return if $("#lesson_id").length == 0 and $("#question_data").length == 0
 numberOfPeople = 0
 
+has_socket = false
 class Socket
   constructor: (url) ->
+    return false if has_socket
+    has_socket = true
     @ws = new WebSocket(url)
     @ws.onopen = => @send(lesson_id: $("#lesson_id").text())
     @ws.onmessage = (e) => @onmessage(e)
