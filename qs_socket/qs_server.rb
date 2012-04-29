@@ -19,7 +19,7 @@ class Connection
 
   def new_message msg
     message = JSON.parse msg
-    return if message[:question] == ''
+    return if message['question'] == ''
     p message
     message.each do |key, value|
       unless %w(question note vote lesson_id).include? key
