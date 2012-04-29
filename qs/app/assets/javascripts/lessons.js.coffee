@@ -85,6 +85,7 @@ class Question
     @dom.children('i').toggleClass('icon-large')
   mark_vote: ->
     @setVotes(@getVotes() + 1)
+    Question.sort() if Question.sortedBy is 'votes'
     @colorize()
   colorize: ->
     votes = @getVotes()
