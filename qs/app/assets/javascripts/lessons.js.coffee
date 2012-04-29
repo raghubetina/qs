@@ -145,7 +145,7 @@ add_sort_click_handler = ->
     Question["sortBy#{sort}"]()
 
 load_realtime = ->
-  window.socket = socket = new Socket("ws://www.questionstream.in:3116")
+  window.socket = socket = new Socket("ws://questionstream.in:3116")
   $("textarea").keypress((e) ->
     return unless e.keyCode is 13
     socket.send(question: $(this).val())
